@@ -1,39 +1,58 @@
 <template>
-    <div> 
-      ¿Qué vols fer?
+  <div class="mb-2">
+    ¿Qué vols fer?
+  </div>
+  <div class="mb-2">
+    <input type="checkbox" id="checkbox0" @click="totalPrice(0)"/>
+    <label  for="checkbox">Obtenir el pressupost d'una pàgina web  ({{ price[0] }}€)</label>
+    <div v-if="pane" class="mt-2">
+      <Panell :basePrice="0" @totalPrice-emited="(b,l,p,fp) => totalPrice(b,l,p,fp)"/>
     </div>
-    <div>
-      <input type="checkbox" id="checkbox0" v-on:click = "totalPrice(0)" /> 
-      <label for="checkbox">Una pàgina web ({{ price[0] }}€)</label>
-    </div>
-    <div>
-      <input type="checkbox" id="checkbox1" v-on:click = "totalPrice(1)" />
-      <label for="checkbox">Una pàgina web ({{ price[1] }}€)</label>
-    </div>
-    <div>
-      <input type="checkbox" id="checkbox2" v-on:click = "totalPrice(2)" /> 
-      <label for="checkbox">Una pàgina web ({{ price[2] }}€)</label>
-    </div>
+  </div>
+  <div class="mb-2">
+    <input type="checkbox" id="checkbox1" @click="totalPrice(1)" />
+    <label for="checkbox">Fer una campanya SEO  ({{ price[1] }}€)</label>
+  </div>
+  <div class="mb-2">
+    <input type="checkbox" id="checkbox2" @click="totalPrice(2)" />
+    <label for="checkbox">Fer una campanya de publicitat ({{ price[2] }}€)</label>
+  </div>
+  <div>
+    Preu: {{ total }}
+  </div>
+</template>
+
+<script setup>
+import { ref } from "vue";
+import Panell from "./Panell.vue";
+import { costCalculator } from '../services/pageCost.js';
+
+const check = ref([false, false, false])
+const price = ref([500, 300, 200])
+const total = ref(0)
+const pane = ref(false)
+const lastPaneValue = ref(0)
+
+const totalPrice = (i, lang=0, pages=0, frompane=false) => {
+  if(!frompane) check.value[i] = !check.value[i]
+
+  if( i == 0 && !frompane) pane.value = !pane.value
   
-    <div>
-      Preu: {{ total}}
-    </div>
-  </template>
-  
-  <script setup>
-    import { ref } from "vue";
-  
-    const check = ref([false, false, false])
-    const price = ref([500, 300, 200])
-    const total = ref(0)
-  
-    const totalPrice = (i) => {
-      check.value[i] = !check.value[i]
-      check.value[i]  ? total.value += price.value[i] : total.value -= price.value[i] 
-    }
-  
-  </script>
-  
-  <style scoped>
-  </style>
-  
+  if(i == 0){
+    var actualValue
+    check.value[i]
+      ? actualValue = costCalculator(price.value[i], lang, pages)
+      : actualValue = 0
+    total.value = total.value - lastPaneValue.value + actualValue
+    lastPaneValue.value = actualValue
+  }else{
+    check.value[i] 
+      ? total.value += costCalculator(price.value[i], lang, pages) 
+      : total.value -= costCalculator(price.value[i], lang, pages)
+  }
+}
+
+</script>
+
+<style scoped>
+</style>
