@@ -3,7 +3,7 @@
     ¿Qué vols fer?
   </div>
   <div class="mb-2">
-    <input type="checkbox" id="checkbox0" @click="totalPrice(0)"/>
+    <input type="checkbox" id="checkbox0" @click="totalPrice(0, 1, 1)"/>
     <label  for="checkbox">Obtenir el pressupost d'una pàgina web  ({{ price[0] }}€)</label>
     <div v-if="pane" class="mt-2">
       <Panell :basePrice="0" @totalPrice-emited="(b,l,p,fp) => totalPrice(b,l,p,fp)"/>
