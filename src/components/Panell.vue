@@ -7,6 +7,7 @@
                 @input="$emit('totalPrice-emited', basePrice, pages, languages, true)" v-model="pages"
             />
         </div>
+        <InputMod />
 
         <div>
             <label class="m-2" for="pages-languges">Número d'idiomes</label>
@@ -20,6 +21,7 @@
 
 <script setup>
     import { ref} from "vue";
+    import InputMod from "./InputMod.vue";
     
     const props = defineProps({
         basePrice: Number
