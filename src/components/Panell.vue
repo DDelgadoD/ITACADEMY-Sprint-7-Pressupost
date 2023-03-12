@@ -1,36 +1,31 @@
 <template>
-    <div class="card rounded border-dark border-4 col-sm-4 p-3">
-        <div>
-            <label class="m-2 " for="pages-number">Número de pàgines</label>
-            <input 
-                type="number" id="pages-number" name="pages-number" min="1"
-                @input="$emit('totalPrice-emited', basePrice, pages, languages, true)" v-model="pages"
-            />
-        </div>
-        <InputMod />
+    <div class="card rounded border-dark col-7 col-sm-6 col-md-5 col-lg-4 ms-4 border-4 p-3">
+        
+    <InputMod id="pages" name="pages-number" counter_initial="1" @totalPricePanell-emitted = "(id, counter) => totalPricePanell(id, counter)" />
+    <InputMod id="languages" name="languages-number" counter_initial="1" @totalPricePanell-emitted = "(id, counter) => totalPricePanell(id, counter)" />
 
-        <div>
-            <label class="m-2" for="pages-languges">Número d'idiomes</label>
-            <input 
-                type="number" id="pages-languages" name="pages-languages" min="1"
-                @input="$emit('totalPrice-emited', basePrice, pages, languages, true)" v-model="languages"
-            />
-        </div>
     </div>
 </template>
 
 <script setup>
-    import { ref} from "vue";
     import InputMod from "./InputMod.vue";
-    
+    import { ref } from "vue";
+
     const props = defineProps({
         basePrice: Number
     })
 
-    const emit = defineEmits(['totalPrice-emited'])
+    var pages = ref(1)
+    var languages = ref(1)
 
-    const pages = ref(1)
-    const languages = ref(1)
+    const emit = defineEmits(['totalPrice-emitted'])
+    
+    const totalPricePanell = (id, value)  =>{
+        if (id == "pages") pages.value = value
+        if (id == "languages") languages.value = value
+        emit('totalPrice-emitted', props.basePrice, pages.value, languages.value, true)
+    }
+
 
 </script>
 
