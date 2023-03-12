@@ -1,3 +1,3 @@
 export function costCalculator(base, languages, number) {
-  return base + languages * number * 30
+    return base + languages * number * 30;
 }
